@@ -37,7 +37,15 @@ public class SnackController {
     }
 
     @GetMapping(value = "/list")
-    public ResponseEntity<List<SnackDTO>> getAll() {
-        return ResponseEntity.ok(service.findAll().stream().map(mapper::toDto).collect(Collectors.toList()));
+    public ResponseEntity<List<SnackDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+        if (sortPrice == 1) {
+            return ResponseEntity.ok(service.findByOrderByPriceAsc().stream().map(mapper::toDto).collect(Collectors.toList()));
+        }
+        else if (sortPrice == 2) {
+            return ResponseEntity.ok(service.findByOrderByPriceDesc().stream().map(mapper::toDto).collect(Collectors.toList()));
+        }
+        else {
+            return ResponseEntity.ok(service.findAll().stream().map(mapper::toDto).collect(Collectors.toList()));
+        }
     }
 }

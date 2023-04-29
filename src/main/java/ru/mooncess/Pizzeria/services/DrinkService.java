@@ -2,16 +2,12 @@ package ru.mooncess.Pizzeria.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mooncess.Pizzeria.dto.dessert.DessertCreateDTO;
-import ru.mooncess.Pizzeria.dto.dessert.DessertDTO;
 import ru.mooncess.Pizzeria.dto.drink.DrinkCreateDTO;
 import ru.mooncess.Pizzeria.dto.drink.DrinkDTO;
-import ru.mooncess.Pizzeria.entities.Dessert;
 import ru.mooncess.Pizzeria.entities.Drink;
-import ru.mooncess.Pizzeria.mappers.DessertMapper;
+import ru.mooncess.Pizzeria.entities.Snack;
 import ru.mooncess.Pizzeria.mappers.DrinkMapper;
-import ru.mooncess.Pizzeria.repositories.DessertRepository;
-import ru.mooncess.Pizzeria.repositories.DrinkRepository;
+import ru.mooncess.Pizzeria.repositories.drink.DrinkRepository;
 
 import java.util.List;
 
@@ -35,5 +31,13 @@ public class DrinkService {
 
     public Drink findById(Long id) {
         return repository.findById(id).orElse(null);
+    }
+
+    public List<Drink> findByOrderByPriceAsc(){
+        return repository.findByOrderByPriceAsc();
+    }
+
+    public List<Drink> findByOrderByPriceDesc(){
+        return repository.findByOrderByPriceDesc();
     }
 }

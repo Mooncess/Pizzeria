@@ -8,7 +8,7 @@ import ru.mooncess.Pizzeria.dto.pizza.PizzaDTO;
 import ru.mooncess.Pizzeria.entities.Additive;
 import ru.mooncess.Pizzeria.entities.Pizza;
 import ru.mooncess.Pizzeria.mappers.PizzaMapper;
-import ru.mooncess.Pizzeria.repositories.PizzaRepository;
+import ru.mooncess.Pizzeria.repositories.pizza.PizzaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,14 @@ public class PizzaService {
 
     public List<Pizza> findAll(){
         return repository.findAll();
+    }
+
+    public List<Pizza> findByOrderByPriceAsc(){
+        return repository.findByOrderByPriceAsc();
+    }
+
+    public List<Pizza> findByOrderByPriceDesc(){
+        return repository.findByOrderByPriceDesc();
     }
 
     public void delete(Long id){
