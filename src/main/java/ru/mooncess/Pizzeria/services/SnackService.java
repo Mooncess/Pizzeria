@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.mooncess.Pizzeria.dto.snack.SnackCreateDTO;
 import ru.mooncess.Pizzeria.dto.snack.SnackDTO;
-import ru.mooncess.Pizzeria.entities.Pizza;
 import ru.mooncess.Pizzeria.entities.Snack;
 import ru.mooncess.Pizzeria.mappers.SnackMapper;
 import ru.mooncess.Pizzeria.repositories.snack.SnackRepository;
