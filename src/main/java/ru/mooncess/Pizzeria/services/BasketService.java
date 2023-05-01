@@ -9,6 +9,7 @@ import ru.mooncess.Pizzeria.entities.*;
 import ru.mooncess.Pizzeria.mappers.AdditiveMapper;
 import ru.mooncess.Pizzeria.mappers.OrderItemMapper;
 import ru.mooncess.Pizzeria.repositories.AdditiveRepository;
+import ru.mooncess.Pizzeria.repositories.BasketRepository;
 import ru.mooncess.Pizzeria.repositories.OrderItemRepository;
 import ru.mooncess.Pizzeria.repositories.ProductRepository;
 
@@ -18,50 +19,69 @@ import java.util.List;
 @AllArgsConstructor
 public class BasketService {
     private final ProductRepository productRepository;
-    private final AdditiveMapper additiveMapper;
     private final OrderItemMapper orderItemMapper;
     private final OrderItemRepository orderItemRepository;
     private final AdditiveRepository additiveRepository;
     public Boolean addToBasket(User user, Long id, OrderItemForCotroller orderItemForCotroller) {
         Product product = productRepository.findById(id).orElseThrow();
-        String description = product.getDescription();
+        String description = product.getTitle();
+        float price = product.getPrice();
         String size = orderItemForCotroller.getSize();
         String dough = orderItemForCotroller.getDough();
         Short quantity = orderItemForCotroller.getQuantity();
         if (size != null) {
-            description += " " + size + ", " + dough + ".";
-            if (size == "STANDARD") {
-                product.setPrice(product.getPrice()+150);
+            if (size.equals("STANDARD")) {
+                price = product.getPrice()+150;
+                description += ". Размер: Средняя";
             }
-            else if (size == "LARGE") {
-                product.setPrice(product.getPrice()+300);
+            else if (size.equals("LARGE")) {
+                price = product.getPrice()+300;
+                description += ". Размер: Большая";
             }
-            for (Long i : orderItemForCotroller.getAdditivesId()) {
-                Additive temp = additiveRepository.findById(i).orElseThrow();
-                description += " " + temp.getTitle();
-                product.setPrice(product.getPrice()+temp.getPrice());
+            else {
+                description += ". Размер: Маленькая";
             }
-            product.setDescription(description);
+            if (dough.equals("TRADITIONAL")) {
+                description += ". Тесто: Традиционное;";
+            }
+            else {
+                description += ". Тесто: Тонкое;";
+            }
+            if (!orderItemForCotroller.getAdditivesId().isEmpty()){
+                description += " +";
+                for (Long i : orderItemForCotroller.getAdditivesId()) {
+                    Additive temp = additiveRepository.findById(i).orElseThrow();
+                    description += " " + temp.getTitle();
+                    price += temp.getPrice();
+                }
+            }
         }
-        CreateOrderItemDTO createOrderItemDTO = new CreateOrderItemDTO();
-        createOrderItemDTO.setTitle(product.getTitle());
-        createOrderItemDTO.setQuantity(quantity);
-        createOrderItemDTO.setPrice(product.getPrice());
-        createOrderItemDTO.setDescription(description);
-        createOrderItemDTO.setBasket(user.getBasket());
-        Basket userBasket = user.getBasket();
-        createOrderItemDTO.setBasket(userBasket);
-        orderItemRepository.save(orderItemMapper.toEntity(createOrderItemDTO));
+        if (orderItemRepository.findByDescriptionAndBasketId(description, user.getBasket().getId()) == null ){
+            CreateOrderItemDTO createOrderItemDTO = new CreateOrderItemDTO();
+            createOrderItemDTO.setTitle(product.getTitle());
+            createOrderItemDTO.setQuantity(quantity);
+            createOrderItemDTO.setPrice(price);
+            createOrderItemDTO.setDescription(description);
+            createOrderItemDTO.setBasket(user.getBasket());
+            Basket userBasket = user.getBasket();
+            createOrderItemDTO.setBasket(userBasket);
+            orderItemRepository.save(orderItemMapper.toEntity(createOrderItemDTO));
+        }
+        else {
+            OrderItem orderItem = orderItemRepository.findByDescriptionAndBasketId(description, user.getBasket().getId());
+            orderItem.setQuantity((short) (orderItem.getQuantity()+quantity));
+            orderItemRepository.save(orderItem);
+        }
         return true;
     }
 
-    public Basket getBasketByUser(User user) {
-        return user.getBasket();
+    public List<OrderItem> getItemsInBasketByUser(User user) {
+        return orderItemRepository.findAllByBasketId(user.getBasket().getId());
     }
 
     // Доделать
-    public Basket deleteFromBasket(User user, Long id) {
-        Basket userBasket = user.getBasket();
-        return getBasketByUser(user);
-    }
+//    public Basket deleteFromBasket(User user, Long id) {
+//        Basket userBasket = user.getBasket();
+//        return getBasketByUser(user);
+//    }
 }

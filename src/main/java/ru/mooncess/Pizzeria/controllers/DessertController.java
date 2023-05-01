@@ -54,9 +54,7 @@ public class DessertController {
     @PostMapping("/addToBasket/{id}")
     public ResponseEntity<Boolean> addToBasket(@PathVariable Long id, @RequestBody OrderItemForCotroller orderItemForCotroller,
                                @AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println(userDetails.getUsername());
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        System.out.println(user.getId());
         basketService.addToBasket(user, id, orderItemForCotroller);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
