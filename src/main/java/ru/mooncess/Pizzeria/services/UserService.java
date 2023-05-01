@@ -32,7 +32,7 @@ public class UserService {
         if (userRepository.existsByEmail(dto.getEmail()))
             throw new UserAlreadyExistsException();
         User user = userMapper.toEntity(dto);
-        user.setRole(Role.USER);
+        user.setRole(Role.ADMIN);
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;

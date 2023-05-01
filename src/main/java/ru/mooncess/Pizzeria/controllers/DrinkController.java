@@ -23,19 +23,6 @@ public class DrinkController {
     private final DrinkService service;
     private final DrinkMapper mapper;
 
-    @PostMapping(value = "/")
-    @ResponseBody
-    public ResponseEntity<DrinkDTO> add(@RequestBody DrinkCreateDTO drink) {
-        return ResponseEntity.ok(service.create(drink));
-    }
-
-    @DeleteMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping(value = "/list")
     public ResponseEntity<List<DrinkDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
         if (sortPrice == 1) {

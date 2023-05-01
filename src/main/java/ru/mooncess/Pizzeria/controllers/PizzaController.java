@@ -19,19 +19,6 @@ public class PizzaController {
     private final PizzaService service;
     private final PizzaMapper mapper;
 
-    @PostMapping(value = "/")
-    @ResponseBody
-    public ResponseEntity<PizzaDTO> add(@RequestBody PizzaCreateDTO pizza) {
-        return ResponseEntity.ok(service.create(pizza));
-    }
-
-    @DeleteMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping(value = "/list")
     public ResponseEntity<List<PizzaDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
         if (sortPrice == 1) {

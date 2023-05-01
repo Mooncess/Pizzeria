@@ -23,19 +23,6 @@ public class SnackController {
     private final SnackService service;
     private final SnackMapper mapper;
 
-    @PostMapping(value = "/")
-    @ResponseBody
-    public ResponseEntity<SnackDTO> add(@RequestBody SnackCreateDTO snack) {
-        return ResponseEntity.ok(service.create(snack));
-    }
-
-    @DeleteMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping(value = "/list")
     public ResponseEntity<List<SnackDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
         if (sortPrice == 1) {

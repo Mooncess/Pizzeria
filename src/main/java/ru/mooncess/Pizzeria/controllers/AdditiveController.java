@@ -19,19 +19,6 @@ public class AdditiveController {
     private final AdditiveService service;
     private final AdditiveMapper mapper;
 
-    @PostMapping(value = "/")
-    @ResponseBody
-    public ResponseEntity<AdditiveDTO> add(@RequestBody AdditiveCreateDTO additive) {
-        return ResponseEntity.ok(service.create(additive));
-    }
-
-    @DeleteMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping(value = "/list")
     public ResponseEntity<List<AdditiveDTO>> getAll() {
         return ResponseEntity.ok(service.findAll().stream().map(mapper::toDto).collect(Collectors.toList()));

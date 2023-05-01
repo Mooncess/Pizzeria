@@ -23,19 +23,6 @@ public class DessertController {
     private final DessertService service;
     private final DessertMapper mapper;
 
-    @PostMapping(value = "/")
-    @ResponseBody
-    public ResponseEntity<DessertDTO> add(@RequestBody DessertCreateDTO dessert) {
-        return ResponseEntity.ok(service.create(dessert));
-    }
-
-    @DeleteMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping(value = "/list")
     public ResponseEntity<List<DessertDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
         if (sortPrice == 1) {
