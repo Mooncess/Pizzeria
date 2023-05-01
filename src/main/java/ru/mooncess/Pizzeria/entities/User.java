@@ -3,12 +3,9 @@ package ru.mooncess.Pizzeria.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import ru.mooncess.Pizzeria.security.Role;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "user_")
@@ -25,4 +22,9 @@ public class User {
     private String password;
     @Enumerated(value = EnumType.STRING)
     private Role role;
+    @OneToOne
+    @JoinColumn(name = "basket_id")
+    private Basket basket;
+    @OneToMany(mappedBy = "buyer")
+    private List<Order> orderList;
 }
