@@ -19,9 +19,6 @@ public class OrderItem {
     private float price;
     private String description;
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-    @ManyToOne
     @JoinColumn(name = "basket_id")
     private Basket basket;
 }

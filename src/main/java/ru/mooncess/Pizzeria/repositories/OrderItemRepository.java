@@ -10,4 +10,5 @@ import java.util.List;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     OrderItem findByDescriptionAndBasketId(String description, Long id);
     List<OrderItem> findAllByBasketId(Long id);
+    OrderItem findByIdAndBasketId(Long id, Long basketId);
 }

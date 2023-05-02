@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.mooncess.Pizzeria.entities.enums.OrderStatus;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -22,15 +24,14 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String address;
-    private Date creationDate;
+    private String creationDate;
+    @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
     private Float total;
+
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private User buyer;
-
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItems;
-
 }

@@ -79,9 +79,10 @@ public class BasketService {
         return orderItemRepository.findAllByBasketId(user.getBasket().getId());
     }
 
-    // Доделать
-//    public Basket deleteFromBasket(User user, Long id) {
-//        Basket userBasket = user.getBasket();
-//        return getBasketByUser(user);
-//    }
+    public boolean deleteFromBasket(User user, Long itemId) {
+        if (orderItemRepository.findByIdAndBasketId(itemId, user.getBasket().getId()) != null) {
+            orderItemRepository.deleteById(itemId);
+        }
+        return true;
+    }
 }
