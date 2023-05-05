@@ -55,4 +55,11 @@ public class UserController {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         return ResponseEntity.ok(orderService.create(user, address));
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/order")
+    public ResponseEntity<List<OrderDTO>> getAllOrderByBuyerId(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        return ResponseEntity.ok(orderService.findAllByBuyerId(user));
+    }
 }

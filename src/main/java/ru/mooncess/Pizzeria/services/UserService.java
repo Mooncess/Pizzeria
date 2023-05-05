@@ -34,7 +34,7 @@ public class UserService {
         if (userRepository.existsByEmail(dto.getEmail()))
             throw new UserAlreadyExistsException();
         User user = userMapper.toEntity(dto);
-        user.setRole(Role.ADMIN);
+        user.setRole(Role.USER);
         Basket basket = new Basket();
         basketRepository.save(basket);
         user.setBasket(basket);

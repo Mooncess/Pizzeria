@@ -3,6 +3,8 @@ package ru.mooncess.Pizzeria.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.mooncess.Pizzeria.dto.additive.AdditiveCreateDTO;
@@ -11,11 +13,17 @@ import ru.mooncess.Pizzeria.dto.dessert.DessertCreateDTO;
 import ru.mooncess.Pizzeria.dto.dessert.DessertDTO;
 import ru.mooncess.Pizzeria.dto.drink.DrinkCreateDTO;
 import ru.mooncess.Pizzeria.dto.drink.DrinkDTO;
+import ru.mooncess.Pizzeria.dto.order.OrderDTO;
 import ru.mooncess.Pizzeria.dto.pizza.PizzaCreateDTO;
 import ru.mooncess.Pizzeria.dto.pizza.PizzaDTO;
 import ru.mooncess.Pizzeria.dto.snack.SnackCreateDTO;
 import ru.mooncess.Pizzeria.dto.snack.SnackDTO;
+import ru.mooncess.Pizzeria.entities.Order;
+import ru.mooncess.Pizzeria.entities.User;
+import ru.mooncess.Pizzeria.entities.enums.OrderStatus;
 import ru.mooncess.Pizzeria.services.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +35,7 @@ public class AdminController {
     private final DrinkService drinkService;
     private final PizzaService pizzaService;
     private final SnackService snackService;
+    private final OrderService orderService;
 
     @PostMapping(value = "/additive/")
     @ResponseBody
@@ -91,6 +100,27 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity<Void> deleteSnack(@PathVariable Long id) {
         snackService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        return ResponseEntity.ok(orderService.findAll());
+    }
+
+    @PostMapping(value = "/orders/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteOrderById(@PathVariable Long id) {
+        orderService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/orders/update/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> updateOrderById(@PathVariable Long id, @RequestBody String orderStatus) {
+        Order order = orderService.findById(id);
+        order.setStatus(OrderStatus.valueOf(orderStatus));
+        orderService.update(order);
         return ResponseEntity.noContent().build();
     }
 }

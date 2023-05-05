@@ -58,10 +58,22 @@ public class OrderService {
         return mapper.toDto(order);
     }
 
-//    public List<OrderListDTO> findAll() {
-//        return repository.findAll().stream().map(mapper::toListDto).collect(Collectors.toList());
-//    }
-//
+    public List<OrderDTO> findAllByBuyerId(User user) {
+        return repository.findAllByBuyerId(user.getId()).stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    public Order findById(Long id) {
+        return repository.findById(id).orElseThrow();
+    }
+
+    public List<OrderDTO> findAll() {
+        return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
 //    public List<OrderListDTO> findAllByUserId(Long id) {
 //        return repository.findAllByBuyerId(id).stream().map(mapper::toListDto).collect(Collectors.toList());
 //    }
@@ -74,9 +86,9 @@ public class OrderService {
 //        return Objects.requireNonNull(repository.findById(id).orElse(null)).getOrderItems().stream().map(mapperItem::toListDto).collect(Collectors.toList());
 //    }
 //
-//    public Order update(Order order) {
-//        return repository.save(order);
-//    }
+    public Order update(Order order) {
+        return repository.save(order);
+    }
 
     public void delete(Long id) {
         repository.deleteById(id);
