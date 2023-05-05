@@ -7,9 +7,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mooncess.Pizzeria.dto.additive.AdditiveCreateDTO;
 import ru.mooncess.Pizzeria.dto.additive.AdditiveDTO;
+import ru.mooncess.Pizzeria.dto.dessert.DessertDTO;
 import ru.mooncess.Pizzeria.dto.drink.DrinkCreateDTO;
 import ru.mooncess.Pizzeria.dto.drink.DrinkDTO;
 import ru.mooncess.Pizzeria.dto.orderitem.OrderItemForCotroller;
@@ -34,16 +36,19 @@ public class DrinkController {
     private final BasketService basketService;
 
     @GetMapping(value = "/list")
-    public ResponseEntity<List<DrinkDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+    public String getAll(Model model, @RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+        List<DrinkDTO> drinkList;
         if (sortPrice == 1) {
-            return ResponseEntity.ok(service.findByOrderByPriceAsc().stream().map(mapper::toDto).collect(Collectors.toList()));
+            drinkList = service.findByOrderByPriceAsc().stream().map(mapper::toDto).collect(Collectors.toList());
         }
         else if (sortPrice == 2) {
-            return ResponseEntity.ok(service.findByOrderByPriceDesc().stream().map(mapper::toDto).collect(Collectors.toList()));
+            drinkList = service.findByOrderByPriceDesc().stream().map(mapper::toDto).collect(Collectors.toList());
         }
         else {
-            return ResponseEntity.ok(service.findAll().stream().map(mapper::toDto).collect(Collectors.toList()));
+            drinkList = service.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
         }
+        model.addAttribute("allDrink", drinkList);
+        return "drink";
     }
 
     @PreAuthorize("isAuthenticated()")

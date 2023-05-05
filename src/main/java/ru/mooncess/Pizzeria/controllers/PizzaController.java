@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mooncess.Pizzeria.dto.orderitem.OrderItemForCotroller;
 import ru.mooncess.Pizzeria.dto.pizza.PizzaCreateDTO;
@@ -30,16 +31,19 @@ public class PizzaController {
     private final BasketService basketService;
 
     @GetMapping(value = "/list")
-    public ResponseEntity<List<PizzaDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+    public String getAll(Model model, @RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+        List<PizzaDTO> pizzaList;
         if (sortPrice == 1) {
-            return ResponseEntity.ok(service.findByOrderByPriceAsc().stream().map(mapper::toDto).collect(Collectors.toList()));
+            pizzaList = service.findByOrderByPriceAsc().stream().map(mapper::toDto).toList();
         }
         else if (sortPrice == 2) {
-            return ResponseEntity.ok(service.findByOrderByPriceDesc().stream().map(mapper::toDto).collect(Collectors.toList()));
+            pizzaList = service.findByOrderByPriceDesc().stream().map(mapper::toDto).collect(Collectors.toList());
         }
         else {
-            return ResponseEntity.ok(service.findAll().stream().map(mapper::toDto).collect(Collectors.toList()));
+            pizzaList = service.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
         }
+        model.addAttribute("allPizza", pizzaList);
+        return "pizza";
     }
 
     @PreAuthorize("isAuthenticated()")

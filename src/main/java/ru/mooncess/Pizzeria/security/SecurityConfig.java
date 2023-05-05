@@ -24,7 +24,7 @@ public class SecurityConfig {
         http.csrf().disable().cors().disable()
                 .addFilterBefore(new UsernamePasswordAuthenticationFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/logout", "/user/registration", "/*/list").permitAll()
+                .requestMatchers("/login", "/logout", "/user/registration", "/*/list", "/pizza").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().permitAll()
                 .and().logout().permitAll()

@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mooncess.Pizzeria.dto.additive.AdditiveAddToPizzaDTO;
 import ru.mooncess.Pizzeria.dto.additive.AdditiveCreateDTO;
@@ -14,6 +15,7 @@ import ru.mooncess.Pizzeria.dto.additive.AdditiveDTO;
 import ru.mooncess.Pizzeria.dto.dessert.DessertCreateDTO;
 import ru.mooncess.Pizzeria.dto.dessert.DessertDTO;
 import ru.mooncess.Pizzeria.dto.orderitem.OrderItemForCotroller;
+import ru.mooncess.Pizzeria.dto.pizza.PizzaDTO;
 import ru.mooncess.Pizzeria.entities.Additive;
 import ru.mooncess.Pizzeria.entities.User;
 import ru.mooncess.Pizzeria.mappers.AdditiveMapper;
@@ -38,16 +40,19 @@ public class DessertController {
     private final BasketService basketService;
 
     @GetMapping(value = "/list")
-    public ResponseEntity<List<DessertDTO>> getAll(@RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+    public String getAll(Model model, @RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+        List<DessertDTO> dessertList;
         if (sortPrice == 1) {
-            return ResponseEntity.ok(service.findByOrderByPriceAsc().stream().map(mapper::toDto).collect(Collectors.toList()));
+            dessertList = service.findByOrderByPriceAsc().stream().map(mapper::toDto).collect(Collectors.toList());
         }
         else if (sortPrice == 2) {
-            return ResponseEntity.ok(service.findByOrderByPriceDesc().stream().map(mapper::toDto).collect(Collectors.toList()));
+            dessertList = service.findByOrderByPriceDesc().stream().map(mapper::toDto).collect(Collectors.toList());
         }
         else {
-            return ResponseEntity.ok(service.findAll().stream().map(mapper::toDto).collect(Collectors.toList()));
+            dessertList = service.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
         }
+        model.addAttribute("allDessert", dessertList);
+        return "dessert";
     }
 
     @PreAuthorize("isAuthenticated()")
