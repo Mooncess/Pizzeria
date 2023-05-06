@@ -57,9 +57,13 @@ public class DessertController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/addToBasket/{id}")
-    public ResponseEntity<Boolean> addToBasket(@PathVariable Long id, @RequestBody OrderItemForCotroller orderItemForCotroller,
+    public ResponseEntity<Boolean> addToBasket(@PathVariable Long id, @RequestParam ("quantity") Short quantity,
                                @AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        OrderItemForCotroller orderItemForCotroller = new OrderItemForCotroller();
+        System.out.println("ЗАШЕЛ");
+        System.out.println(quantity);
+        orderItemForCotroller.setQuantity(quantity);
         basketService.addToBasket(user, id, orderItemForCotroller);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
