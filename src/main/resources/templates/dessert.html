@@ -12,6 +12,12 @@
             var value = parseInt(document.getElementById("quantity").value);
             document.getElementById("quantity").value = isNaN(value) ? 1 : (value - 1 < 1 ? 1 : value - 1);
         }
+        function successMessage() {
+            var input = document.getElementById("quantity");
+            if (input.value.trim() != "") {
+                alert("Товар успешно добавлен!");
+            }
+        }
     </script>
 </head>
 <body>
@@ -25,12 +31,12 @@
     <b><p th:text="${dessert.price}" style="font-size: 25px;"></p></b>
     <p th:text="${dessert.description}"></p>
     <p th:text="'Вес: ' + ${dessert.weight} + ' грамм'"></p>
-    <form th:action="${'/dessert/addToBasket/' + dessert.id}" method="post">
+    <form id="formAdd" th:action="${'/dessert/addToBasket/' + dessert.id}" method="post">
       <label for="quantity">Quantity:</label>
-      <input type="text" id="quantity" name="quantity"/>
+      <input type="text" id="quantity" name="quantity" tabindex="-1"  style="pointer-events: none;" required/>
       <button type="button" onclick="decrease()">-</button>
       <button type="button" onclick="increase()">+</button>
-      <button type="submit">Buy</button>
+      <button type="submit" onclick="successMessage()">Buy</button>
     </form>
     <hr>
   </li>

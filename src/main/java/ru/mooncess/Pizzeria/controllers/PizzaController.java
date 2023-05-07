@@ -23,14 +23,13 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/pizza")
 public class PizzaController {
     private final PizzaService service;
     private final PizzaMapper mapper;
     private final UserRepository userRepository;
     private final BasketService basketService;
 
-    @GetMapping(value = "/list")
+    @GetMapping(value = {"/pizza/list", "/"})
     public String getAll(Model model, @RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
         List<PizzaDTO> pizzaList;
         if (sortPrice == 1) {
@@ -47,7 +46,7 @@ public class PizzaController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/addToBasket/{id}")
+    @PostMapping("/pizza/addToBasket/{id}")
     public ResponseEntity<Boolean> addToBasket(@PathVariable Long id, @RequestBody OrderItemForCotroller orderItemForCotroller,
                                                @AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
