@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SUPER-PIZZA</title>
+    <script th:inline="javascript">
+        function successMessage() {
+            alert("Позиция успешно удалена!");
+        }
+        function confirmMessage() {
+            alert("Ваш заказ принят!");
+        }
+    </script>
+</head>
+<body>
+<style>
+ul {
+    list-style-type: none;
+    display : flex;
+}
+li {
+    padding: 20px;
+}
+a {
+    color: #000 !important;
+    text-decoration: none
+}
+</style>
+<header>
+    <nav >
+        <ul class="nav_bar">
+            <li class="nav-bar-element"><strong>Super Pizza</strong></li>
+            <li class="nav-bar-element"><a href="/pizza/list">Pizzas</a></li>
+            <li class="nav-bar-element"><a href="/snack/list">Snacks</a></li>
+            <li class="nav-bar-element"><a href="/dessert/list">Desserts</a></li>
+            <li class="nav-bar-element"><a href="/drink/list">Drinks</a></li>
+            <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Log-in</a></li>
+            <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
+            <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/create_cloth_page">ADMIN MODE</a></li>
+            <li th:if="${isAuthenticated}" >
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</header>
+<h1 style="text-align: center;">YOUR BASKET</h1>
+
+<ul style="flex-direction: column;">
+    <li th:each="item : ${allItem}" style="padding: 5px;">
+        <b><p th:text="${item.title}" style="font-size: 30px;"></p></b>
+        <p th:text="${item.description}"></p>
+        <p th:text="'Количество: ' + ${item.quantity}" style="font-size: 25px;"></p>
+        <p th:text="'Стоимость: ' + ${item.price}" style="font-size: 25px;"></p>
+        <form id="formDelete" th:action="${'/user/basket/deleteItem/' + item.id}" method="post">
+            <button style="color: red;" type="submit" onclick="successMessage()">УДАЛИТЬ</button>
+        </form>
+        <hr>
+    </li>
+</ul>
+<b><p th:text="'К оплате: ' + ${total}" style="font-size: 30px; padding: 5px;"></p></b>
+<form id="formConfirm" action="/user/basket/confirm" method="post">
+    <label for="address">Введите адрес доставки:</label>
+    <input type="text" id="address" name="address" required/>
+    <button style="color: green;" type="submit" onclick="confirmMessage()">ПОДТВЕРДИТЬ ЗАКАЗ</button>
+</form>
+</body>
+
+</html>

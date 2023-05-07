@@ -50,7 +50,8 @@ a {
       <li class="nav-bar-element"><a href="/drink/list">Drinks</a></li>
       <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Log-in</a></li>
       <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
-      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/basket">Basket</a></li>
+      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
+      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
       <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/create_cloth_page">ADMIN MODE</a></li>
       <li th:if="${isAuthenticated}" >
         <form th:action="@{/logout}" method="post">
