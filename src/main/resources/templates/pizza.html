@@ -23,6 +23,9 @@
                 alert("Товар успешно добавлен!");
             }
         }
+        function successDelete() {
+            alert("Операция выполнена успешно.");
+        }
     </script>
 </head>
 <body>
@@ -52,7 +55,7 @@ a {
             <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
             <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
             <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
-            <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/create_cloth_page">ADMIN MODE</a></li>
+            <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/admin/">ADMIN MODE</a></li>
             <li th:if="${isAuthenticated}" >
                 <form th:action="@{/logout}" method="post">
                     <input type="submit" value="Sign Out"/>
@@ -62,8 +65,8 @@ a {
     </nav>
 </header>
     <h1 style="text-align: center;">PIZZAS</h1>
-    <p style="text-align: center;">ВАЖНО: Цена указана за самый маленький размер пиццы</p>
-    <p style="text-align: center;">Стандартная пицца: + 150 | Большая пицца: + 300</p>
+    <p style="text-align: center;">ВАЖНО: Цена указана за средний размер пиццы</p>
+    <p style="text-align: center;">Маленькая пицца: - 150 | Большая пицца: + 150</p>
 
     <ul style="flex-direction: column;">
         <li th:each="pizza : ${allPizza}" style="padding: 5px;">
@@ -90,6 +93,9 @@ a {
                 <button type="button" onclick="decrease(event)" th:id="${'quantity' + pizza.id}">-</button>
                 <button type="button" onclick="increase(event)" th:id="${'quantity' + pizza.id}">+</button>
                 <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + pizza.id}">Buy</button>
+            </form>
+            <form th:if="${isAdmin}" id="formDelete" th:action="${'/admin/pizza/' + pizza.id}" method="post">
+                <button style="color: red" type="submit" onclick="successDelete()">DELETE</button>
             </form>
             <hr>
         </li>

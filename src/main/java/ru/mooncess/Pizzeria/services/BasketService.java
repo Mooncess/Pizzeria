@@ -30,16 +30,16 @@ public class BasketService {
         String dough = orderItemForCotroller.getDough();
         Short quantity = orderItemForCotroller.getQuantity();
         if (size != null) {
-            if (size.equals("STANDARD")) {
-                price = product.getPrice()+150;
-                description += ". Размер: Средняя";
+            if (size.equals("SMALL")) {
+                price = product.getPrice()-150;
+                description += ". Размер: Маленькая";
             }
             else if (size.equals("LARGE")) {
-                price = product.getPrice()+300;
+                price = product.getPrice()+150;
                 description += ". Размер: Большая";
             }
             else {
-                description += ". Размер: Маленькая";
+                description += ". Размер: Средняя";
             }
             if (dough.equals("TRADITIONAL")) {
                 description += ". Тесто: Традиционное;";

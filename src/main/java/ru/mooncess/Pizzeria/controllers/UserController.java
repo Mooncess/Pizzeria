@@ -21,6 +21,7 @@ import ru.mooncess.Pizzeria.services.BasketService;
 import ru.mooncess.Pizzeria.services.OrderService;
 import ru.mooncess.Pizzeria.services.UserService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class UserController {
         List<OrderItemDTO> allItem = basketService.getItemsInBasketByUser(user).stream().map(orderItemMapper::toDto).toList();
         float total = 0;
         for (OrderItemDTO i : allItem) {
-            total+=i.getPrice();
+            total += i.getPrice() * i.getQuantity();
         }
         model.addAttribute("allItem", allItem);
         model.addAttribute("total", total);
@@ -72,7 +73,6 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/basket/confirm")
     public String confirmOrder(@AuthenticationPrincipal UserDetails userDetails, @RequestParam ("address") String address) {
-        System.out.println("WORK HARDDDDD");
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         orderService.create(user, address);
         return "redirect:/user/order";
@@ -83,6 +83,7 @@ public class UserController {
     public String getAllOrderByBuyerId(Authentication authentication, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         List<OrderDTO> allOrder = orderService.findAllByBuyerId(user);
+        Collections.reverse(allOrder);
         model.addAttribute("allOrder", allOrder);
         boolean isAuthenticated = authentication != null && authentication.isAuthenticated();
         boolean isAdmin = false;

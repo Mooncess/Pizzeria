@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <title>SUPER-PIZZA</title>
   <script th:inline="javascript">
-        function successMessage() {
-            alert("Позиция успешно удалена!");
-        }
-        function confirmMessage() {
-            alert("Ваш заказ принят!");
+        function successDelete() {
+            alert("Операция выполнена успешно.");
         }
     </script>
 </head>
@@ -28,6 +25,7 @@ a {
 </style>
 <header>
   <nav >
+
     <ul class="nav_bar">
       <li class="nav-bar-element"><strong>Super Pizza</strong></li>
       <li class="nav-bar-element"><a href="/pizza/list">Pizzas</a></li>
@@ -47,15 +45,16 @@ a {
     </ul>
   </nav>
 </header>
-<h1 style="text-align: center;">YOUR ORDERS</h1>
+<h1 style="text-align: center;">ADDITIVES</h1>
 
 <ul style="flex-direction: column;">
-  <li th:each="order : ${allOrder}" style="padding: 5px;">
-    <b><p th:text="'Заказ от ' + ${order.creationDate}" style="font-size: 30px;"></p></b>
-    <p th:text="'Адрес доставки: ' + ${order.address}" style="font-size: 20px;"></p>
-    <p th:text="${order.description}"></p>
-    <p th:text="'Статус заказа: ' + ${order.status}" style="font-size: 18px;"></p>
-    <p th:text="'К оплате: ' + ${order.total}" style="font-size: 25px;"></p>
+  <li th:each="additive : ${additiveList}" style="padding: 5px;">
+    <b><p th:text="${additive.title}" style="font-size: 30px;"></p></b>
+    <p style="font-size: 25px;">Цена:</p>
+    <b><p th:text="${additive.price}" style="font-size: 25px;"></p></b>
+    <form th:if="${isAdmin}" id="formDelete" th:action="${'/admin/additive/' + additive.id}" method="post">
+      <button style="color: red" type="submit" onclick="successDelete()">DELETE</button>
+    </form>
     <hr>
   </li>
 </ul>

@@ -8,7 +8,10 @@
             alert("Позиция успешно удалена!");
         }
         function confirmMessage() {
-            alert("Ваш заказ принят!");
+            var input = document.getElementById(address);
+            if (input.value.trim() != "") {
+                alert("Ваш заказ принят!");
+            }
         }
     </script>
 </head>
@@ -47,18 +50,30 @@ a {
     </ul>
   </nav>
 </header>
-<h1 style="text-align: center;">YOUR ORDERS</h1>
-
-<ul style="flex-direction: column;">
-  <li th:each="order : ${allOrder}" style="padding: 5px;">
-    <b><p th:text="'Заказ от ' + ${order.creationDate}" style="font-size: 30px;"></p></b>
-    <p th:text="'Адрес доставки: ' + ${order.address}" style="font-size: 20px;"></p>
-    <p th:text="${order.description}"></p>
-    <p th:text="'Статус заказа: ' + ${order.status}" style="font-size: 18px;"></p>
-    <p th:text="'К оплате: ' + ${order.total}" style="font-size: 25px;"></p>
-    <hr>
-  </li>
-</ul>
+<h1 style="text-align: center;">ADMIN MODE</h1>
+<div style="text-align: center;">
+  <form action="/additive/list" method="get" style="padding: 20px">
+    <button style="color: #969abb;" type="submit">Просмотреть все возможные добавки к пицце</button>
+  </form>
+  <form action="/admin/additive_create.html" style="padding: 20px">
+    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новую добавку к пицце</button>
+  </form>
+  <form action="/user/basket/confirm" method="post" style="padding: 20px">
+    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новый десерт</button>
+  </form>
+  <form action="/user/basket/confirm" method="post" style="padding: 20px">
+    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новый напиток</button>
+  </form>
+  <form action="/user/basket/confirm" method="post" style="padding: 20px">
+    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новую пиццу</button>
+  </form>
+  <form action="/user/basket/confirm" method="post" style="padding: 20px">
+    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новую закуску</button>
+  </form>
+  <form action="/user/basket/confirm" method="post" style="padding: 20px">
+    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Работа с заказами</button>
+  </form>
+</div>
 </body>
 
 </html>

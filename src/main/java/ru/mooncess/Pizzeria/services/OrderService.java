@@ -31,7 +31,6 @@ public class OrderService {
     private final OrderItemMapper mapperItem;
     private final UserService userService;
     private final OrderItemRepository orderItemRepository;
-    //private OrderItemService orderItemService;
 
     public OrderDTO create(User user, String address) {
         List<OrderItem> basketList = user.getBasket().getOrderItemList();

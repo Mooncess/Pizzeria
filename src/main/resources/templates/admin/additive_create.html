@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>SUPER-PIZZA</title>
     <script th:inline="javascript">
-        function successMessage() {
-            alert("Позиция успешно удалена!");
-        }
-        function confirmMessage() {
-            var input = document.getElementById(address);
-            if (input.value.trim() != "") {
-                alert("Ваш заказ принят!");
+        function validateForm() {
+            var inputField = document.getElementById("price").value.trim();
+            if (inputField > 0) {
+                alert("Операция выполнена успешно.");
+                return true;
+            else {
+                alert("Введены некорректные данные");
             }
-        }
+  }
+}
     </script>
 </head>
 <body>
@@ -31,6 +32,7 @@ a {
 </style>
 <header>
     <nav >
+
         <ul class="nav_bar">
             <li class="nav-bar-element"><strong>Super Pizza</strong></li>
             <li class="nav-bar-element"><a href="/pizza/list">Pizzas</a></li>
@@ -50,32 +52,16 @@ a {
         </ul>
     </nav>
 </header>
-<h1 style="text-align: center;">YOUR BASKET</h1>
+<h1 style="text-align: center;">ADDITIVES</h1>
 
-<ul style="flex-direction: column;">
-    <li th:each="item : ${allItem}" style="padding: 5px;">
-        <b><p th:text="${item.title}" style="font-size: 30px;"></p></b>
-        <p th:text="${item.description}"></p>
-        <p th:text="'Количество: ' + ${item.quantity}" style="font-size: 25px;"></p>
-        <p th:text="'Стоимость: ' + ${item.price}" style="font-size: 25px;"></p>
-        <form id="formDelete" th:action="${'/user/basket/deleteItem/' + item.id}" method="post">
-            <button style="color: red;" type="submit" onclick="successMessage()">УДАЛИТЬ</button>
-        </form>
-        <hr>
-    </li>
-</ul>
-<div th:if="${total} == 0" >
-    <p style="font-size: 30px; text-align: center;">Ваша корзина пуста</p>
-</div>
-<div th:if="${total} != 0" style="width: 50%; margin: 0 auto;">
-    <b><p th:text="'К оплате: ' + ${total}" style="font-size: 30px; padding: 5px;"></p></b>
-    <form id="formConfirm" action="/user/basket/confirm" method="post">
-        <label for="address">Введите адрес доставки:</label>
-        <input type="text" id="address" name="address" required/>
-        <p></p>
-        <button style="color: green;" type="submit" onclick="confirmMessage()">ПОДТВЕРДИТЬ ЗАКАЗ</button>
-    </form>
-</div>
+<form th:if="${isAdmin}" id="formCreate" action="/admin/additive/" method="post" onsubmit="return validateForm()">
+    <label for="title">Название:</label>
+    <input type="text" id="title" name="title" required/>
+    <label for="price">Цена:</label>
+    <input type="text" id="price" name="price" required/>
+    <button style="color: green" type="submit">CREATE</button>
+</form>
+
 </body>
 
 </html>

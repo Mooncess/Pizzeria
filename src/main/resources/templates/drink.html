@@ -23,6 +23,9 @@
                 alert("Товар успешно добавлен!");
             }
         }
+        function successDelete() {
+            alert("Операция выполнена успешно.");
+        }
     </script>
 </head>
 <body>
@@ -51,7 +54,7 @@ a {
             <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
             <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
             <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
-            <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/create_cloth_page">ADMIN MODE</a></li>
+            <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/admin/">ADMIN MODE</a></li>
             <li th:if="${isAuthenticated}" >
                 <form th:action="@{/logout}" method="post">
                     <input type="submit" value="Sign Out"/>
@@ -63,7 +66,7 @@ a {
 <h1 style="text-align: center;">DRINKS</h1>
 
 <ul style="flex-direction: column;">
-    <li th:each="drink : ${allDrinks}" style="padding: 5px;">
+    <li th:each="drink : ${allDrink}" style="padding: 5px;">
         <b><p th:text="${drink.title}" style="font-size: 30px;"></p></b>
         <p style="font-size: 25px;">Цена:</p>
         <b><p th:text="${drink.price}" style="font-size: 25px;"></p></b>
@@ -75,6 +78,9 @@ a {
             <button type="button" onclick="decrease(event)" th:id="${'quantity' + drink.id}">-</button>
             <button type="button" onclick="increase(event)" th:id="${'quantity' + drink.id}">+</button>
             <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + drink.id}">Buy</button>
+        </form>
+        <form th:if="${isAdmin}" id="formDelete" th:action="${'/admin/drink/' + drink.id}" method="post">
+            <button style="color: red" type="submit" onclick="successDelete()">DELETE</button>
         </form>
         <hr>
     </li>

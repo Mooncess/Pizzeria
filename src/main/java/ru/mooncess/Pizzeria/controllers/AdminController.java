@@ -3,9 +3,11 @@ package ru.mooncess.Pizzeria.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mooncess.Pizzeria.dto.additive.AdditiveCreateDTO;
 import ru.mooncess.Pizzeria.dto.additive.AdditiveDTO;
@@ -24,6 +26,7 @@ import ru.mooncess.Pizzeria.entities.enums.OrderStatus;
 import ru.mooncess.Pizzeria.services.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,17 +40,30 @@ public class AdminController {
     private final SnackService snackService;
     private final OrderService orderService;
 
+    @GetMapping(value = "/")
+    public String getAdminMenu(Authentication authentication, Model model) {
+        boolean isAuthenticated = authentication != null && authentication.isAuthenticated();
+        boolean isAdmin = false;
+        if (isAuthenticated) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            isAdmin = userDetails.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+        }
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        return "admin/admin_mode";
+    }
+
     @PostMapping(value = "/additive/")
     @ResponseBody
     public ResponseEntity<AdditiveDTO> addAddtive(@RequestBody AdditiveCreateDTO additive) {
         return ResponseEntity.ok(additiveService.create(additive));
     }
 
-    @DeleteMapping(value = "/additive/{id}")
+    @PostMapping(value = "/additive/{id}")
     @ResponseBody
-    public ResponseEntity<Void> deleteAddtive(@PathVariable Long id) {
+    public String deleteAdditive(@PathVariable Long id) {
         additiveService.delete(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/additive/list";
     }
 
     @PostMapping(value = "/dessert/")
@@ -56,11 +72,11 @@ public class AdminController {
         return ResponseEntity.ok(dessertService.create(dessert));
     }
 
-    @DeleteMapping(value = "/dessert/{id}")
+    @PostMapping(value = "/dessert/{id}")
     @ResponseBody
-    public ResponseEntity<Void> deleteDessert(@PathVariable Long id) {
+    public String deleteDessert(@PathVariable Long id) {
         dessertService.delete(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/dessert/list";
     }
 
     @PostMapping(value = "/drink/")
@@ -69,11 +85,11 @@ public class AdminController {
         return ResponseEntity.ok(drinkService.create(drink));
     }
 
-    @DeleteMapping(value = "/drink/{id}")
+    @PostMapping(value = "/drink/{id}")
     @ResponseBody
-    public ResponseEntity<Void> deleteDrink(@PathVariable Long id) {
+    public String deleteDrink(@PathVariable Long id) {
         drinkService.delete(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/drink/list";
     }
 
     @PostMapping(value = "/pizza/")
@@ -82,11 +98,11 @@ public class AdminController {
         return ResponseEntity.ok(pizzaService.create(pizza));
     }
 
-    @DeleteMapping(value = "/pizza/{id}")
+    @PostMapping(value = "/pizza/{id}")
     @ResponseBody
-    public ResponseEntity<Void> deletePizza(@PathVariable Long id) {
+    public String deletePizza(@PathVariable Long id) {
         pizzaService.delete(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/pizza/list";
     }
 
 
@@ -98,9 +114,9 @@ public class AdminController {
 
     @DeleteMapping(value = "/snack/{id}")
     @ResponseBody
-    public ResponseEntity<Void> deleteSnack(@PathVariable Long id) {
+    public String deleteSnack(@PathVariable Long id) {
         snackService.delete(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/snack/list";
     }
 
     @GetMapping("/orders")
