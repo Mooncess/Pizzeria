@@ -18,6 +18,7 @@ import ru.mooncess.Pizzeria.repositories.UserRepository;
 import ru.mooncess.Pizzeria.services.BasketService;
 import ru.mooncess.Pizzeria.services.PizzaService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,10 +48,18 @@ public class PizzaController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/pizza/addToBasket/{id}")
-    public ResponseEntity<Boolean> addToBasket(@PathVariable Long id, @RequestBody OrderItemForCotroller orderItemForCotroller,
-                                               @AuthenticationPrincipal UserDetails userDetails) {
+    public String addToBasket(@PathVariable Long id, @RequestParam ("quantity") Short quantity,
+                              @RequestParam ("pizzaSize") String pizzaSize,
+                              @RequestParam ("pizzaDough") String pizzaDough,
+                              @RequestParam (name = "selectedAdditives", required = false) List<Long> selectedAdditives,
+                              @AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        OrderItemForCotroller orderItemForCotroller = new OrderItemForCotroller();
+        orderItemForCotroller.setSize(pizzaSize);
+        orderItemForCotroller.setDough(pizzaDough);
+        orderItemForCotroller.setAdditivesId(selectedAdditives);
+        orderItemForCotroller.setQuantity(quantity);
         basketService.addToBasket(user, id, orderItemForCotroller);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return "redirect:/pizza/list";
     }
 }

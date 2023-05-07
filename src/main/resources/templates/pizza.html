@@ -3,6 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script th:inline="javascript">
+        function increase(event) {
+            var personalId = event.target.id;
+            console.log(personalId);
+            var value = parseInt(document.getElementById(personalId).value);
+            document.getElementById(personalId).value = isNaN(value) ? 1 : value + 1;
+        }
+        function decrease(event) {
+            var personalId = event.target.id;
+            console.log(personalId);
+            var value = parseInt(document.getElementById(personalId).value);
+            document.getElementById(personalId).value = isNaN(value) ? 1 : (value - 1 < 1 ? 1 : value - 1);
+        }
+        function successMessage(event) {
+            var personalId = event.target.id;
+            var input = document.getElementById(personalId);
+            if (input.value.trim() != "") {
+                alert("Товар успешно добавлен!");
+            }
+        }
+    </script>
 </head>
 <body>
     <div th:insert="~{header_component.html}"></div>
@@ -16,18 +37,26 @@
             <p style="font-size: 25px;">Цена:</p>
             <b><p th:text="${pizza.price}" style="font-size: 25px;"></p></b>
             <p th:text="${pizza.description}"></p>
-            <p>Размер: </p>
-            <select>
-                <option th:each="size : ${pizza.availableSize}" th:value="${size.size}"><p th:text="${size}"></p></option>
-            </select>
-            <p>Тесто: </p>
-            <select>
-                <option th:each="dough : ${pizza.availableDough}" th:value="${dough.dough}"><p th:text="${dough}"></p></option>
-            </select>
-            <div th:each="additive : ${pizza.availableAdditive}">
-                <input type="checkbox" th:id="${additive.id}" th:name="'selectedItems'" th:value="${additive.id}" />
-                <label th:for="${additive.id}" th:text="${additive.title} + ' +' + ${additive.price}"></label>
-            </div>
+            <form id="formAdd" th:action="${'/pizza/addToBasket/' + pizza.id}" method="post">
+                <p>Размер: </p>
+                <select name="pizzaSize">
+                    <option th:each="size : ${pizza.availableSize}" th:value="${size}"><p th:text="${size}"></p></option>
+                </select>
+                <p>Тесто: </p>
+                <select name="pizzaDough">
+                    <option th:each="dough : ${pizza.availableDough}" th:value="${dough}"><p th:text="${dough}"></p></option>
+                </select>
+                <div th:each="additive : ${pizza.availableAdditive}">
+                    <input type="checkbox" th:id="${additive.id}" th:name="selectedAdditives" th:value="${additive.id}" />
+                    <label th:for="${additive.id}" th:text="${additive.title} + ' +' + ${additive.price}"></label>
+                </div>
+                <p></p>
+                <label th:for="${'quantity' + pizza.id}">Quantity:</label>
+                <input type="text" th:id="${'quantity' + pizza.id}" name="quantity" tabindex="-1"  style="pointer-events: none;" required/>
+                <button type="button" onclick="decrease(event)" th:id="${'quantity' + pizza.id}">-</button>
+                <button type="button" onclick="increase(event)" th:id="${'quantity' + pizza.id}">+</button>
+                <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + pizza.id}">Buy</button>
+            </form>
             <hr>
         </li>
     </ul>

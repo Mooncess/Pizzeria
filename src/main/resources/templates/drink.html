@@ -3,6 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script th:inline="javascript">
+        function increase(event) {
+            var personalId = event.target.id;
+            console.log(personalId);
+            var value = parseInt(document.getElementById(personalId).value);
+            document.getElementById(personalId).value = isNaN(value) ? 1 : value + 1;
+        }
+        function decrease(event) {
+            var personalId = event.target.id;
+            console.log(personalId);
+            var value = parseInt(document.getElementById(personalId).value);
+            document.getElementById(personalId).value = isNaN(value) ? 1 : (value - 1 < 1 ? 1 : value - 1);
+        }
+        function successMessage(event) {
+            var personalId = event.target.id;
+            var input = document.getElementById(personalId);
+            if (input.value.trim() != "") {
+                alert("Товар успешно добавлен!");
+            }
+        }
+    </script>
 </head>
 <body>
 <div th:insert="~{header_component.html}"></div>
@@ -15,12 +36,12 @@
         <b><p th:text="${drink.price}" style="font-size: 25px;"></p></b>
         <p th:text="${drink.description}"></p>
         <p th:text="'Объем: ' + ${drink.volume}"></p>
-        <form th:action="${'/dessert/addToBasket/' + dessert.id}" method="post">
-            <label for="quantity">Quantity:</label>
-            <input type="text" id="quantity" name="quantity" required/>
-            <button type="button" onclick="decrease()">-</button>
-            <button type="button" onclick="increase()">+</button>
-            <button type="submit">Buy</button>
+        <form id="formAdd" th:action="${'/drink/addToBasket/' + drink.id}" method="post">
+            <label th:for="${'quantity' + drink.id}">Quantity:</label>
+            <input type="text" th:id="${'quantity' + drink.id}" name="quantity" tabindex="-1"  style="pointer-events: none;" required/>
+            <button type="button" onclick="decrease(event)" th:id="${'quantity' + drink.id}">-</button>
+            <button type="button" onclick="increase(event)" th:id="${'quantity' + drink.id}">+</button>
+            <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + drink.id}">Buy</button>
         </form>
         <hr>
     </li>

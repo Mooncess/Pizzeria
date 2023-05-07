@@ -53,12 +53,12 @@ public class SnackController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/addToBasket/{id}")
-    public ResponseEntity<Boolean> addToBasket(@PathVariable Long id, @RequestBody OrderItemForCotroller orderItemForCotroller,
+    public String addToBasket(@PathVariable Long id, @RequestParam ("quantity") Short quantity,
                                                @AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println(userDetails.getUsername());
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        System.out.println(user.getId());
+        OrderItemForCotroller orderItemForCotroller = new OrderItemForCotroller();
+        orderItemForCotroller.setQuantity(quantity);
         basketService.addToBasket(user, id, orderItemForCotroller);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return "redirect:/snack/list";
     }
 }

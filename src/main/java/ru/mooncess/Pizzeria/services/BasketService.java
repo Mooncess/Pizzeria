@@ -47,7 +47,7 @@ public class BasketService {
             else {
                 description += ". Тесто: Тонкое;";
             }
-            if (!orderItemForCotroller.getAdditivesId().isEmpty()){
+            if (orderItemForCotroller.getAdditivesId() != null){
                 description += " +";
                 for (Long i : orderItemForCotroller.getAdditivesId()) {
                     Additive temp = additiveRepository.findById(i).orElseThrow();
