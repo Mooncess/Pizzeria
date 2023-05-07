@@ -1,4 +1,4 @@
-package ru.mooncess.Pizzeria.security;
+package ru.mooncess.Pizzeria.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

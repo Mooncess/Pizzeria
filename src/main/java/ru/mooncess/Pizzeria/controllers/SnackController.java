@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,7 @@ public class SnackController {
     private final BasketService basketService;
 
     @GetMapping(value = "/list")
-    public String getAll(Model model, @RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
+    public String getAll(Authentication authentication, Model model, @RequestParam(name = "sort", required = false, defaultValue = "0") Integer sortPrice) {
         List<SnackDTO> snackList;
         if (sortPrice == 1) {
             snackList = service.findByOrderByPriceAsc().stream().map(mapper::toDto).collect(Collectors.toList());
@@ -48,6 +49,16 @@ public class SnackController {
             snackList = service.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
         }
         model.addAttribute("allSnack", snackList);
+
+        boolean isAuthenticated = authentication != null && authentication.isAuthenticated();
+        boolean isAdmin = false;
+        if (isAuthenticated) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            isAdmin = userDetails.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+        }
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isAuthenticated", isAuthenticated);
+
         return "snack";
     }
 

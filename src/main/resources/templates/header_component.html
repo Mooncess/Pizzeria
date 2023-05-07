@@ -26,11 +26,11 @@ a {
       <li class="nav-bar-element"><a href="/snack/list">Snacks</a></li>
       <li class="nav-bar-element"><a href="/dessert/list">Desserts</a></li>
       <li class="nav-bar-element"><a href="/drink/list">Drinks</a></li>
-      <li sec:authorize="isAnonymous()" ><a href="/login">Log-in</a></li>
-      <li sec:authorize="isAnonymous()" class="nav-bar-element"><a href="/registration">Registration</a></li>
-      <li sec:authorize="isAuthenticated()" style="border-bottom: none;"><a href="/basket">Basket</a></li>
+      <li th:if="${not isAuthenticated}" ><a href="/login">Log-in</a></li>
+      <li th:if="${not isAuthenticated}" class="nav-bar-element"><a href="/registration">Registration</a></li>
+      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/basket">Basket</a></li>
       <li sec:authorize="hasAnyAuthority('ADMIN')" style="border-bottom: none" class="nav-bar-element"><a href="/create_cloth_page">Create Products</a></li>
-      <li sec:authorize="isAuthenticated()" >
+      <li th:if="${isAuthenticated}" >
         <form th:action="@{/logout}" method="post">
           <input type="submit" value="Sign Out"/>
         </form>
