@@ -65,8 +65,8 @@ public class OrderService {
         return repository.findById(id).orElseThrow();
     }
 
-    public List<OrderDTO> findAll() {
-        return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
+    public List<Order> findAll() {
+        return repository.findAll();
     }
 
     public void deleteById(Long id) {

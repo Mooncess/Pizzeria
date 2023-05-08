@@ -3,17 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>SUPER-PIZZA</title>
-  <script th:inline="javascript">
-        function successMessage() {
-            alert("Позиция успешно удалена!");
-        }
-        function confirmMessage() {
-            var input = document.getElementById(address);
-            if (input.value.trim() != "") {
-                alert("Ваш заказ принят!");
-            }
-        }
-    </script>
 </head>
 <body>
 <style>
@@ -53,25 +42,25 @@ a {
 <h1 style="text-align: center;">ADMIN MODE</h1>
 <div style="text-align: center;">
   <form action="/additive/list" method="get" style="padding: 20px">
-    <button style="color: #969abb;" type="submit">Просмотреть все возможные добавки к пицце</button>
+    <button style="color: #350054;" type="submit">Просмотреть все возможные добавки к пицце</button>
   </form>
-  <form action="/admin/additive_create.html" style="padding: 20px">
-    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новую добавку к пицце</button>
+  <form action="/admin/additive_create" method="get" style="padding: 20px">
+    <button style="color: #350054;" type="submit">Создать новую добавку к пицце</button>
   </form>
-  <form action="/user/basket/confirm" method="post" style="padding: 20px">
-    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новый десерт</button>
+  <form action="/admin/dessert_create" method="get" style="padding: 20px">
+    <button style="color: #350054;" type="submit">Создать новый десерт</button>
   </form>
-  <form action="/user/basket/confirm" method="post" style="padding: 20px">
-    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новый напиток</button>
+  <form action="/admin/drink_create" method="get" style="padding: 20px">
+    <button style="color: #350054;" type="submit">Создать новый напиток</button>
   </form>
-  <form action="/user/basket/confirm" method="post" style="padding: 20px">
-    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новую пиццу</button>
+  <form action="/admin/pizza_create" method="get" style="padding: 20px">
+    <button style="color: #350054;" type="submit">Создать новую пиццу</button>
   </form>
-  <form action="/user/basket/confirm" method="post" style="padding: 20px">
-    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Создать новую закуску</button>
+  <form action="/admin/snack_create" method="get" style="padding: 20px">
+    <button style="color: #350054;" type="submit">Создать новую закуску</button>
   </form>
-  <form action="/user/basket/confirm" method="post" style="padding: 20px">
-    <button style="color: #969abb;" type="submit" onclick="confirmMessage()">Работа с заказами</button>
+  <form action="/admin/orders" method="get" style="padding: 20px">
+    <button style="color: #350054;" type="submit">Работа с заказами</button>
   </form>
 </div>
 </body>

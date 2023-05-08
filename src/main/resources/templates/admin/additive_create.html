@@ -9,11 +9,12 @@
             if (inputField > 0) {
                 alert("Операция выполнена успешно.");
                 return true;
+            }
             else {
                 alert("Введены некорректные данные");
+                return false;
             }
-  }
-}
+        }
     </script>
 </head>
 <body>
@@ -57,8 +58,10 @@ a {
 <form th:if="${isAdmin}" id="formCreate" action="/admin/additive/" method="post" onsubmit="return validateForm()">
     <label for="title">Название:</label>
     <input type="text" id="title" name="title" required/>
+    <p></p>
     <label for="price">Цена:</label>
     <input type="text" id="price" name="price" required/>
+    <p></p>
     <button style="color: green" type="submit">CREATE</button>
 </form>
 

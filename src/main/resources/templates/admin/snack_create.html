@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>SUPER-PIZZA</title>
+    <script th:inline="javascript">
+        function validateForm() {
+            var inputField1 = document.getElementById("price").value.trim();
+            var inputField2 = document.getElementById("weight").value.trim();
+            if (inputField1 > 0 && inputField2 > 0) {
+                alert("Операция выполнена успешно.");
+                return true;
+            }
+            else {
+                alert("Введены некорректные данные");
+                return false;
+            }
+        }
+    </script>
 </head>
 <body>
+<style>
+ul {
+    list-style-type: none;
+    display : flex;
+}
+li {
+    padding: 20px;
+}
+a {
+    color: #000 !important;
+    text-decoration: none
+}
+</style>
+<header>
+    <nav >
+
+        <ul class="nav_bar">
+            <li class="nav-bar-element"><strong>Super Pizza</strong></li>
+            <li class="nav-bar-element"><a href="/pizza/list">Pizzas</a></li>
+            <li class="nav-bar-element"><a href="/snack/list">Snacks</a></li>
+            <li class="nav-bar-element"><a href="/dessert/list">Desserts</a></li>
+            <li class="nav-bar-element"><a href="/drink/list">Drinks</a></li>
+            <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Log-in</a></li>
+            <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
+            <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/admin/">ADMIN MODE</a></li>
+            <li th:if="${isAuthenticated}" >
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</header>
+<h1 style="text-align: center;">SNACKS</h1>
+
+<form th:if="${isAdmin}" id="formCreate" action="/admin/snack/" method="post" onsubmit="return validateForm()">
+    <label for="title">Название:</label>
+    <input type="text" id="title" name="title" required/>
+    <p></p>
+    <label for="description">Описание:</label>
+    <input type="text" id="description" name="description" required/>
+    <p></p>
+    <label for="weight">Вес:</label>
+    <input type="text" id="weight" name="weight" required/>
+    <p></p>
+    <label for="price">Цена:</label>
+    <input type="text" id="price" name="price" required/>
+    <p></p>
+    <button style="color: green" type="submit">CREATE</button>
+</form>
 
 </body>
+
 </html>
