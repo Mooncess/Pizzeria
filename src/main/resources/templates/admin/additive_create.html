@@ -32,18 +32,17 @@ a {
 }
 </style>
 <header>
-    <nav >
-
+    <nav>
         <ul class="nav_bar">
             <li class="nav-bar-element"><strong>Super Pizza</strong></li>
-            <li class="nav-bar-element"><a href="/pizza/list">Pizzas</a></li>
-            <li class="nav-bar-element"><a href="/snack/list">Snacks</a></li>
-            <li class="nav-bar-element"><a href="/dessert/list">Desserts</a></li>
-            <li class="nav-bar-element"><a href="/drink/list">Drinks</a></li>
-            <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Log-in</a></li>
-            <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
-            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
-            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
+            <li class="nav-bar-element"><a href="/pizza/list">Пицца</a></li>
+            <li class="nav-bar-element"><a href="/snack/list">Закуски</a></li>
+            <li class="nav-bar-element"><a href="/dessert/list">Десерты</a></li>
+            <li class="nav-bar-element"><a href="/drink/list">Напитки</a></li>
+            <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Войти</a></li>
+            <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Регистрация</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">Мои заказы</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Корзина</a></li>
             <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/admin/">ADMIN MODE</a></li>
             <li th:if="${isAuthenticated}" >
                 <form th:action="@{/logout}" method="post">
@@ -53,7 +52,7 @@ a {
         </ul>
     </nav>
 </header>
-<h1 style="text-align: center;">ADDITIVES</h1>
+<h1 style="text-align: center;">ДОБАВКИ К ПИЦЦЕ</h1>
 
 <form th:if="${isAdmin}" id="formCreate" action="/admin/additive/" method="post" onsubmit="return validateForm()">
     <label for="title">Название:</label>

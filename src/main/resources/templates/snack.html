@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>SUPER-PIZZA</title>
     <script th:inline="javascript">
         function increase(event) {
             var personalId = event.target.id;
@@ -47,14 +47,14 @@ a {
 
         <ul class="nav_bar">
             <li class="nav-bar-element"><strong>Super Pizza</strong></li>
-            <li class="nav-bar-element"><a href="/pizza/list">Pizzas</a></li>
-            <li class="nav-bar-element"><a href="/snack/list">Snacks</a></li>
-            <li class="nav-bar-element"><a href="/dessert/list">Desserts</a></li>
-            <li class="nav-bar-element"><a href="/drink/list">Drinks</a></li>
-            <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Log-in</a></li>
-            <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
-            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
-            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
+            <li class="nav-bar-element"><a href="/pizza/list">Пицца</a></li>
+            <li class="nav-bar-element"><a href="/snack/list">Закуски</a></li>
+            <li class="nav-bar-element"><a href="/dessert/list">Десерты</a></li>
+            <li class="nav-bar-element"><a href="/drink/list">Напитки</a></li>
+            <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Войти</a></li>
+            <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Регистрация</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">Мои заказы</a></li>
+            <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Корзина</a></li>
             <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/admin/">ADMIN MODE</a></li>
             <li th:if="${isAuthenticated}" >
                 <form th:action="@{/logout}" method="post">
@@ -64,7 +64,18 @@ a {
         </ul>
     </nav>
 </header>
-<h1 style="text-align: center;">SNACKS</h1>
+<h1 style="text-align: center;">ЗАКУСКИ</h1>
+
+<div style="text-align: center; padding: 5px;">
+    <p>Сортировка:</p>
+    <form action="/snack/list" method="get">
+        <button name="sort" value="1" type="submit">По увеличению цены</button>
+    </form>
+    <p></p>
+    <form action="/snack/list" method="get">
+        <button name="sort" value="2" type="submit">По уменьшению цены</button>
+    </form>
+</div>
 
 <ul style="flex-direction: column;">
     <li th:each="snack : ${allSnack}" style="padding: 5px;">
@@ -74,11 +85,11 @@ a {
         <p th:text="${snack.description}"></p>
         <p th:text="'Вес: ' + ${snack.weight}"></p>
         <form id="formAdd" th:action="${'/snack/addToBasket/' + snack.id}" method="post">
-            <label th:for="${'quantity' + snack.id}">Quantity:</label>
+            <label th:for="${'quantity' + snack.id}">Количество:</label>
             <input type="text" th:id="${'quantity' + snack.id}" name="quantity" tabindex="-1"  style="pointer-events: none;" required/>
             <button type="button" onclick="decrease(event)" th:id="${'quantity' + snack.id}">-</button>
             <button type="button" onclick="increase(event)" th:id="${'quantity' + snack.id}">+</button>
-            <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + snack.id}">Buy</button>
+            <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + snack.id}">В корзину</button>
         </form>
         <form th:if="${isAdmin}" id="formDelete" th:action="${'/admin/snack/' + snack.id}" method="post">
             <button style="color: red" type="submit" onclick="successDelete()">DELETE</button>

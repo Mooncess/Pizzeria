@@ -44,17 +44,16 @@ a {
 </style>
 <header>
   <nav >
-
     <ul class="nav_bar">
       <li class="nav-bar-element"><strong>Super Pizza</strong></li>
-      <li class="nav-bar-element"><a href="/pizza/list">Pizzas</a></li>
-      <li class="nav-bar-element"><a href="/snack/list">Snacks</a></li>
-      <li class="nav-bar-element"><a href="/dessert/list">Desserts</a></li>
-      <li class="nav-bar-element"><a href="/drink/list">Drinks</a></li>
-      <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Log-in</a></li>
-      <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Registration</a></li>
-      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">My Orders</a></li>
-      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Basket</a></li>
+      <li class="nav-bar-element"><a href="/pizza/list">Пицца</a></li>
+      <li class="nav-bar-element"><a href="/snack/list">Закуски</a></li>
+      <li class="nav-bar-element"><a href="/dessert/list">Десерты</a></li>
+      <li class="nav-bar-element"><a href="/drink/list">Напитки</a></li>
+      <li th:if="${not isAuthenticated}" style="background-color: #b4ccd7;"><a href="/login">Войти</a></li>
+      <li th:if="${not isAuthenticated}" class="nav-bar-element" style="background-color: #ffddd4;"><a href="/registration">Регистрация</a></li>
+      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/order">Мои заказы</a></li>
+      <li th:if="${isAuthenticated}" style="border-bottom: none;"><a href="/user/basket">Корзина</a></li>
       <li th:if="${isAdmin}" style="border-bottom: none; background-color: #969abb;" class="nav-bar-element" ><a href="/admin/">ADMIN MODE</a></li>
       <li th:if="${isAuthenticated}" >
         <form th:action="@{/logout}" method="post">
@@ -64,21 +63,31 @@ a {
     </ul>
   </nav>
 </header>
-<h1 style="text-align: center;">DESSERTS</h1>
+<h1 style="text-align: center;">ДЕСЕРТЫ</h1>
+
+<div style="text-align: center; padding: 5px;">
+  <p>Сортировка:</p>
+  <form action="/dessert/list" method="get">
+    <button name="sort" value="1" type="submit">По увеличению цены</button>
+  </form>
+  <p></p>
+  <form action="/dessert/list" method="get">
+    <button name="sort" value="2" type="submit">По уменьшению цены</button>
+  </form>
+</div>
 
 <ul style="flex-direction: column;">
   <li th:each="dessert : ${allDessert}" style="padding: 5px;">
     <b><p th:text="${dessert.title}" style="font-size: 30px;"></p></b>
-    <p style="font-size: 25px;">Цена:</p>
-    <b><p th:text="${dessert.price}" style="font-size: 25px;"></p></b>
+    <b><p th:text="'Цена: ' + ${dessert.price}" style="font-size: 25px;"></p></b>
     <p th:text="${dessert.description}"></p>
     <p th:text="'Вес: ' + ${dessert.weight} + ' грамм'"></p>
     <form id="formAdd" th:action="${'/dessert/addToBasket/' + dessert.id}" method="post">
-      <label th:for="${'quantity' + dessert.id}">Quantity:</label>
+      <label th:for="${'quantity' + dessert.id}">Количество:</label>
       <input type="text" th:id="${'quantity' + dessert.id}" name="quantity" tabindex="-1"  style="pointer-events: none;" required/>
       <button type="button" onclick="decrease(event)" th:id="${'quantity' + dessert.id}">-</button>
       <button type="button" onclick="increase(event)" th:id="${'quantity' + dessert.id}">+</button>
-      <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + dessert.id}">Buy</button>
+      <button type="submit" onclick="successMessage(event)" th:id="${'quantity' + dessert.id}">В корзину</button>
     </form>
     <form th:if="${isAdmin}" id="formDelete" th:action="${'/admin/dessert/' + dessert.id}" method="post">
       <button style="color: red" type="submit" onclick="successDelete()">DELETE</button>
